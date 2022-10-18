@@ -1,0 +1,3 @@
+# -*- coding: utf-8 -*-
+def is_reachable(host) -> bool:
+    ...

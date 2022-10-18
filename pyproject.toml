@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "hostcheck"
+version = "0.1.0"
+description = "Check your host web connectivity"
+license = "MIT"
+authors = ["Mathieu DE SOUSA <mathieu.desousa@proton.me>"]
+readme = "README.md"
+repository = ""
+keywords = ["web", "connectivity", "ssl", "dns", "certificate"]
+packages = [
+    { include = "hostcheck", from = "src" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+dnspython = "^2.2.1"
+
+[tool.poetry.group.dev.dependencies]
+tox = "^3.26.0"
+pre-commit = "^2.20.0"
+black = "^22.10.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
