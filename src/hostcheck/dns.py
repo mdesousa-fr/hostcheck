@@ -6,7 +6,7 @@ import dns.resolver
 
 
 class DNSStatus(Enum):
-    NOT_SET = "⚪"
+    UNKNOWN = "⚪"
     OK = "🟢"
     NOT_EXISTS = "🟡"
     NO_ANSWER = "🟠"
@@ -21,7 +21,7 @@ class DNSCheck:
     def __init__(self, host) -> None:
         self.host = host
         self.ip = list()
-        self.status = DNSStatus.NOT_SET
+        self.status = DNSStatus.UNKNOWN
 
     def resolve(self) -> bool:
         result = True
@@ -34,6 +34,8 @@ class DNSCheck:
             result = False
         except dns.resolver.NoAnswer:
             self.status = DNSStatus.NO_ANSWER
+            result = False
+        except:
             result = False
         return result
 
