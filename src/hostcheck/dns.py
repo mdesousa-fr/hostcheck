@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
+from dataclasses import dataclass
 from enum import Enum
-from typing import Tuple
 
 import dns.resolver
 
@@ -12,13 +12,31 @@ class DNSStatus(Enum):
     NO_ANSWER = "🟠"
 
 
-def is_resolved(host: str) -> Tuple[bool, DNSStatus]:
-    result = True, DNSStatus.NOT_SET
-    try:
-        dns.resolver.resolve(host)
-        result = True, DNSStatus.OK
-    except dns.resolver.NXDOMAIN:
-        result = False, DNSStatus.NOT_EXISTS
-    except dns.resolver.NoAnswer:
-        result = False, DNSStatus.NO_ANSWER
-    return result
+@dataclass(init=False)
+class DNSCheck:
+    host: str
+    ip: str
+    status: DNSStatus
+
+    def __init__(self, host) -> None:
+        self.host = host
+        self.ip = list()
+        self.status = DNSStatus.NOT_SET
+
+    def resolve(self) -> bool:
+        result = True
+        try:
+            self.ip = dns.resolver.resolve(self.host)[0].to_text()
+            self.status = DNSStatus.OK
+            result = True
+        except dns.resolver.NXDOMAIN:
+            self.status = DNSStatus.NOT_EXISTS
+            result = False
+        except dns.resolver.NoAnswer:
+            self.status = DNSStatus.NO_ANSWER
+            result = False
+        return result
+
+    def to_text(self) -> str:
+        output = f"{self.status.value} | status: {self.status.name}, ip: {self.ip}"
+        return output

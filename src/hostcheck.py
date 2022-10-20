@@ -7,11 +7,12 @@ from hostcheck.cmd import Args
 
 def main():
     args = Args(sys.argv[1:])
-    print(args)
     for h in args.hosts:
+        dns = hostcheck.dns.DNSCheck(h)
+        dns.resolve()
         print(
             f""">>> {h} <<<
-        dns: {hostcheck.dns.is_resolved(h)}"""
+        dns\t{dns.to_text()}"""
         )
 
 
